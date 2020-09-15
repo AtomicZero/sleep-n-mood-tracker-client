@@ -3,10 +3,10 @@ import { HashRouter, Switch, Route, Link } from "react-router-dom";
 
 import { AppContext } from "./App";
 
-import { Register } from "./Register/Register";
-import { Login } from "./Login/Login";
-import { Welcome } from "./Welcome/Welcome";
-import { Info } from "./Info/Info";
+import { Register } from "./pages/Register";
+import { Login } from "./pages/Login";
+import { Welcome } from "./pages/Welcome";
+
 
 const UnauthorisedWrapper = (props) => {
   return (
@@ -35,9 +35,6 @@ export const Router = () => {
             <li>
               <Link to="/welcome">welcome</Link>
             </li>
-            <li>
-              <Link to="/info">info</Link>
-            </li>
           </ul>
         </nav>
 
@@ -52,13 +49,10 @@ export const Router = () => {
             {user.token ? (
               <Welcome />
             ) : (
-              <UnauthorisedWrapper>
-                <Login />
-              </UnauthorisedWrapper>
-            )}
-          </Route>
-          <Route path="/info">
-            <Info />
+                <UnauthorisedWrapper>
+                  <Login />
+                </UnauthorisedWrapper>
+              )}
           </Route>
         </Switch>
       </div>

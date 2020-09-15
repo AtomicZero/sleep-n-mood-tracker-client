@@ -6,6 +6,8 @@ import { REGISTER_URL } from "../api/constants";
 export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
@@ -17,12 +19,22 @@ export const Register = () => {
     setPassword(event.target.value);
   };
 
+  const onFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+
+  const onsetLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
+
   const onSubmit = async () => {
     const {
       data: { success, message },
     } = await axios.post(REGISTER_URL, {
       email,
       password,
+      firstName,
+      lastName,
     });
 
     if (success) {
@@ -38,6 +50,8 @@ export const Register = () => {
         <h2>Register</h2>
         <input type="email" value={email} onChange={onEmailChange} />
         <input type="password" value={password} onChange={onPasswordChange} />
+        <input type="password" value={password} onChange={onFirstNameChange} />
+        <input type="password" value={password} onChange={onsetLastNameChange} />
         <button onClick={onSubmit}>Submit</button>
       </div>
       {statusMessage && <small>{statusMessage}</small>}
