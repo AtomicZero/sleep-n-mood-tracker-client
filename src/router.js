@@ -5,8 +5,8 @@ import UserContext from "./context/UserContext";
 
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
-import { Welcome } from "./pages/Welcome";
-import { Plan } from "./pages/Plan";
+import MyPlans from "./pages/MyPlans";
+import Dashboard from "./pages/Dashboard";
 
 export const Router = () => {
   const { user } = useContext(UserContext);
@@ -14,19 +14,19 @@ export const Router = () => {
   return (
     <Switch>
       <Route path="/" exact>
-        {user.token ? <Redirect to="/welcome" /> : <Login />}
+        {user.token ? <Redirect to="/dashboard" /> : <Redirect to="/login" />}
       </Route>
       <Route path="/login">
-        {user.token ? <Redirect to="/welcome" /> : <Login />}
+        {user.token ? <Redirect to="/dashboard" /> : <Login />}
       </Route>
       <Route path="/register">
-        {user.token ? <Redirect to="/welcome" /> : <Register />}
+        {user.token ? <Redirect to="/dashboard" /> : <Register />}
       </Route>
-      <Route path="/welcome">
-        {user.token ? <Welcome /> : <Redirect to="/login" />}
+      <Route path="/dashboard">
+        {user.token ? <Dashboard /> : <Redirect to="/login" />}
       </Route>
-      <Route path="/plan">
-        {user.token ? <Plan /> : <Redirect to="/login" />}
+      <Route path="/my-plans">
+        {user.token ? <MyPlans /> : <Redirect to="/login" />}
       </Route>
     </Switch>
   );

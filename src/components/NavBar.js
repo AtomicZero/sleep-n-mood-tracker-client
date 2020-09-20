@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Menu } from "antd";
 
 import UserContext from "../context/UserContext";
 import ProtectedRoutes from "./ProtectedRoutes";
@@ -11,16 +12,14 @@ const NavBar = () => {
     return <ProtectedRoutes />;
   }
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/login">login</Link>
-        </li>
-        <li>
-          <Link to="/register">register</Link>
-        </li>
-      </ul>
-    </nav>
+    <Menu mode="horizontal" style={{ padding: "0px 50px" }}>
+      <Menu.Item key="login">
+        <Link to="/login">Login</Link>
+      </Menu.Item>
+      <Menu.Item key="register">
+        <Link to="/register">Register</Link>
+      </Menu.Item>
+    </Menu>
   );
 };
 
