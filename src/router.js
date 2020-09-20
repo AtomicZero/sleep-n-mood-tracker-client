@@ -1,61 +1,33 @@
 import React, { useContext } from "react";
-import { HashRouter, Switch, Route, Link } from "react-router-dom";
+import { Redirect, Switch, Route } from "react-router-dom";
 
-import { AppContext } from "./App";
+import UserContext from "./context/UserContext";
 
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
-import { Welcome } from "./pages/Welcome";
-
-
-const UnauthorisedWrapper = (props) => {
-  return (
-    <div>
-      <p>Please login before accessing the welcome page</p>
-      {props.children}
-    </div>
-  );
-};
+import MyPlans from "./pages/MyPlans";
+import Dashboard from "./pages/Dashboard";
 
 export const Router = () => {
-  const appContext = useContext(AppContext);
-  const { user } = appContext;
+  const { user } = useContext(UserContext);
 
   return (
-    <HashRouter>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/login">login</Link>
-            </li>
-            <li>
-              <Link to="/register">register</Link>
-            </li>
-            <li>
-              <Link to="/welcome">welcome</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/welcome">
-            {user.token ? (
-              <Welcome />
-            ) : (
-                <UnauthorisedWrapper>
-                  <Login />
-                </UnauthorisedWrapper>
-              )}
-          </Route>
-        </Switch>
-      </div>
-    </HashRouter>
+    <Switch>
+      <Route path="/" exact>
+        {user.token ? <Redirect to="/dashboard" /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/login">
+        {user.token ? <Redirect to="/dashboard" /> : <Login />}
+      </Route>
+      <Route path="/register">
+        {user.token ? <Redirect to="/dashboard" /> : <Register />}
+      </Route>
+      <Route path="/dashboard">
+        {user.token ? <Dashboard /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/my-plans">
+        {user.token ? <MyPlans /> : <Redirect to="/login" />}
+      </Route>
+    </Switch>
   );
 };

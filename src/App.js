@@ -1,14 +1,28 @@
-import React, { useState, createContext } from "react";
-import { Router } from "./router";
+import React, { useState } from "react";
+import { HashRouter } from "react-router-dom";
+import { Layout } from "antd";
 
-export const AppContext = createContext();
+import UserContext from "./context/UserContext";
+import NavBar from "./components/NavBar";
+import { Router } from "./Router";
+
+const { Header, Content } = Layout;
 
 export const App = () => {
   const [user, setUser] = useState({});
 
   return (
-    <AppContext.Provider value={{ user, setUser }}>
-      <Router />
-    </AppContext.Provider>
+    <HashRouter>
+      <Layout>
+        <UserContext.Provider value={{ user, setUser }}>
+          <Header style={{ padding: "0px" }}>
+            <NavBar />
+          </Header>
+          <Content>
+            <Router />
+          </Content>
+        </UserContext.Provider>
+      </Layout>
+    </HashRouter>
   );
 };
