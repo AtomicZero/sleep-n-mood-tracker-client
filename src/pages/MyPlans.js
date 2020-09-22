@@ -7,6 +7,7 @@ import  PlanSetUp  from "../components/PlanSetUp"
 
 import UserContext from "../context/UserContext";
 import { BASE_URL } from "../api/constants";
+import SleepStat from "../components/SleepStat";
 
 const MyPlans = () => {
 
@@ -58,6 +59,7 @@ const MyPlans = () => {
   console.log(plans);
   return (
     <div>
+      <SleepStat />
       <PlanSetUp />
     </div>
   );
