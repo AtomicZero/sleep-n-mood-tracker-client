@@ -1,19 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Spin, Modal } from "antd";
+import { Spin, Modal, Button, Row } from "antd";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import  PlanSetUp  from "../components/PlanSetUp"
+import { PlusOutlined } from "@ant-design/icons";
 
-
+import PlanSetUp from "../components/PlanSetUp";
 import UserContext from "../context/UserContext";
 import { BASE_URL } from "../api/constants";
+import Plans from "../components/Plans";
 
 const MyPlans = () => {
-
   const history = useHistory();
   const { user } = useContext(UserContext);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +39,14 @@ const MyPlans = () => {
     fetchData();
   }, [history, user.token]);
 
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleHideModal = (e) => {
+    setShowModal(false);
+  };
+
   if (loading) {
     return (
       <div
@@ -55,10 +64,28 @@ const MyPlans = () => {
     );
   }
 
-  console.log(plans);
   return (
     <div>
-      <PlanSetUp />
+      <Row
+        style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}
+        justify="center"
+        align="middle"
+      >
+        <Button
+          type="primary"
+          onClick={handleShowModal}
+          size="large"
+          style={{ width: "50%" }}
+        >
+          <span>
+            <PlusOutlined /> Plan
+          </span>
+        </Button>
+      </Row>
+      <Modal title="Add New Plan" visible={showModal} footer={null}>
+        <PlanSetUp onCancel={handleHideModal} />
+      </Modal>
+      <Plans plans={plans} />
     </div>
   );
 };

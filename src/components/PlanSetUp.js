@@ -1,32 +1,18 @@
 import React, { useContext } from "react";
-import { isMobile } from "react-device-detect";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  DatePicker,
-  InputNumber,
-  Modal,
-} from "antd";
+import { Form, Input, Button, DatePicker, InputNumber, Modal } from "antd";
 import axios from "axios";
 import UserContext from "../context/UserContext";
 import { useHistory } from "react-router-dom";
 import { BASE_URL } from "../api/constants";
 
-const PlanSetUp = () => {
+const PlanSetUp = ({ onCancel }) => {
   const { user } = useContext(UserContext);
   const history = useHistory();
 
   const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+    labelCol: { span: 10 },
+    wrapperCol: { span: 14 },
   };
-
-  function onChange(date, dateString) {
-    console.log(date, dateString);
-  }
 
   const onFinish = async ({ title, desiredHours, weekCommencing }) => {
     try {
@@ -36,7 +22,9 @@ const PlanSetUp = () => {
         weekCommencing: weekCommencing.toDate(),
       };
 
-      const { _id: planId } = await axios.post(`${BASE_URL}/api/plans`, payload, {
+      const {
+        data: { _id: planId },
+      } = await axios.post(`${BASE_URL}/api/plans`, payload, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       Modal.success({
@@ -54,65 +42,71 @@ const PlanSetUp = () => {
   };
 
   return (
-    <Row type="flex" justify="center" align="middle">
-      <Col
-        span={isMobile ? 24 : 12}
-        style={{ border: "solid 1px #8a838a", backgroundColor: "white" }}
+    <div justify="center" align="middle">
+      <Form
+        {...layout}
+        name="basic"
+        initialValues={{ remember: true }}
+        style={{ margin: "50px" }}
+        onFinish={onFinish}
       >
-        <Form
-          {...layout}
-          name="basic"
-          initialValues={{ remember: true }}
-          style={{ margin: "50px" }}
-          onFinish={onFinish}
+        <Form.Item
+          label="Title"
+          name="title"
+          rules={[
+            {
+              required: true,
+              message: "Please input a plan title for your sleep plan",
+            },
+          ]}
         >
-          <Form.Item
-            label="Plan Title"
-            name="title"
-            rules={[
-              {
-                required: true,
-                message: "Please input a plan title for your sleep plan",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Sleep Goal Hours"
-            name="desiredHours"
-            rules={[
-              {
-                required: true,
-                message:
-                  "Please input your sleep goal hours for your sleep plan",
-              },
-            ]}
-          >
-            <InputNumber style={{ width: "100%" }} />
-          </Form.Item>
-          <Form.Item
-            label="For Week Commencing"
-            name="weekCommencing"
-            rules={[
-              {
-                required: true,
-                message:
-                  "Please input the week commencing date for your sleep plan",
-              },
-            ]}
-          >
-            <DatePicker onChange={onChange} style={{ width: "100%" }} />
-          </Form.Item>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Sleep Hours"
+          name="desiredHours"
+          rules={[
+            {
+              required: true,
+              message: "Please input your sleep goal hours for your sleep plan",
+            },
+          ]}
+        >
+          <InputNumber style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item
+          label="Week Commencing"
+          name="weekCommencing"
+          rules={[
+            {
+              required: true,
+              message:
+                "Please input the week commencing date for your sleep plan",
+            },
+          ]}
+        >
+          <DatePicker style={{ width: "100%" }} />
+        </Form.Item>
 
-          <Form.Item justify="center" align="middle">
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </Col>
-    </Row>
+        <Form.Item justify="center" align="middle">
+          <Button
+            type="default"
+            htmlType="button"
+            onClick={onCancel}
+            style={{ marginRight: "8px" }}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ marginRight: "8px" }}
+          >
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 
