@@ -1,8 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
-import { Spin, Modal, PageHeader, Button, Descriptions, Card, Row } from "antd";
+import {
+  Spin,
+  Modal,
+  PageHeader,
+  Button,
+  Descriptions,
+  Card,
+  Row,
+  InputNumber,
+  Input,
+  DatePicker,
+  Form,
+} from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { format } from "date-fns";
+import moment from "moment";
 
 import { BASE_URL } from "../api/constants";
 import UserContext from "../context/UserContext";
@@ -13,6 +27,7 @@ const MyPlan = () => {
   const { user } = useContext(UserContext);
   const [plan, setPlan] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +69,10 @@ const MyPlan = () => {
     );
   }
 
+  const handleClickEdit = () => {
+    setEditMode(true);
+  };
+
   const renderPlanDetails = () => {
     return (
       <div
@@ -67,8 +86,8 @@ const MyPlan = () => {
           title={plan.title}
           subTitle={plan.status}
           extra={[
-            <Button key="edit" type="primary">
-              Edit
+            <Button key="edit" type="primary" onClick={handleClickEdit}>
+              {editMode ? "Edit Mode" : "Edit"}
             </Button>,
           ]}
         >
@@ -88,11 +107,91 @@ const MyPlan = () => {
     );
   };
 
+  const handleLogUpdate = (values) => {
+    console.log(values);
+  };
+
+  const handleLogDelete = (event) => {
+    console.log("delete", event.currentTarget.id);
+  };
+
   const renderLogCard = (log) => {
+    if (editMode) {
+      return (
+        <Card
+          title={log.day}
+          extra={
+            <CloseCircleOutlined
+              style={{ color: "red" }}
+              onClick={handleLogDelete}
+              id={log._id}
+            />
+          }
+          style={{ width: 300, margin: "20px" }}
+          key={log._id}
+        >
+          <Form
+            name="editLog"
+            initialValues={{
+              actualSleepHours: log.actualSleepHours,
+              mood: log.mood,
+              date: moment(log.date),
+            }}
+            onFinish={handleLogUpdate}
+          >
+            <Form.Item
+              name="actualSleepHours"
+              rules={[
+                {
+                  required: true,
+                  message:
+                    "Please input your sleep goal hours for your sleep plan",
+                },
+              ]}
+              style={{ textAlign: "center", marginBottom: "8px" }}
+            >
+              <InputNumber size="large" min={0} max={24} />
+            </Form.Item>
+            <Form.Item
+              name="mood"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your mood",
+                },
+              ]}
+              style={{ textAlign: "center", marginBottom: "8px" }}
+            >
+              <Input size="large" placeholder="Your mood..." />
+            </Form.Item>
+            <Form.Item
+              name="date"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input log date",
+                },
+              ]}
+              style={{ textAlign: "center", marginBottom: "8px" }}
+            >
+              <DatePicker format="DD/MM/YYYY" />
+            </Form.Item>
+            <Form.Item
+              justify="center"
+              align="middle"
+              style={{ textAlign: "center", marginBottom: "8px" }}
+            >
+              <Button type="primary" htmlType="submit">
+                Update
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      );
+    }
     return (
       <Card
         title={log.day}
-        extra={<Link to={`/plans/${plan._id}`}>Edit</Link>}
         style={{ width: 300, margin: "20px" }}
         key={log._id}
       >
