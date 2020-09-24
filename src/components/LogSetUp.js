@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { Form, Input, Button, DatePicker, InputNumber, Modal } from "antd";
 import axios from "axios";
+import { addDays } from 'date-fns';
 import UserContext from "../context/UserContext";
 import { useParams } from "react-router-dom";
 import { BASE_URL } from "../api/constants";
 
-const LogSetUp = ({ onCancel, setPlan }) => {
+const LogSetUp = ({ onCancel, setPlan, weekCommencing }) => {
   const { planId } = useParams();
   const { user } = useContext(UserContext);
 
@@ -69,7 +70,7 @@ const LogSetUp = ({ onCancel, setPlan }) => {
             },
           ]}
         >
-          <DatePicker style={{ width: "100%" }} />
+          <DatePicker style={{ width: "100%" }} disabledDate={d => d.isAfter(addDays(new Date(weekCommencing), 7)) || d.isBefore(new Date(weekCommencing)) } />
         </Form.Item>
         <Form.Item
           label="Mood"

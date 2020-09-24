@@ -15,7 +15,7 @@ import {
 } from "antd";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import moment from "moment";
 
 import { BASE_URL } from "../api/constants";
@@ -101,12 +101,17 @@ const MyPlan = () => {
       Modal.success({
         content: "Your log has been successfully updated",
         onOk() {
-          const filteredLogs = plan.logs.filter(each => each._id !== logId)
-          const newLogs = [...filteredLogs, log];
+          const logs = plan.logs.map(each => {
+            if (each._id !== logId) {
+              return each
+            } else {
+              return log
+            }
+          })
 
           setPlan({
             ...plan,
-            logs: newLogs.sort((a, b) => b.date - a.date),
+            logs,
           })
 
           setEditMode(false);
@@ -120,8 +125,35 @@ const MyPlan = () => {
     }
   };
 
-  const handleLogDelete = (event) => {
-    console.log("delete", event.currentTarget.id);
+  const handleLogDelete = async (event) => {
+    const logId = event.currentTarget.id;
+    try {
+      await axios.delete(
+        `${BASE_URL}/api/plans/${planId}/logs/${logId}`,
+        {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      );
+
+      Modal.success({
+        content: "Your log has been successfully deleted",
+        onOk() {
+          const logs = plan.logs.filter(each => each._id !== logId)
+
+          setPlan({
+            ...plan,
+            logs,
+          })
+
+          setEditMode(false);
+        },
+      });
+    } catch (err) {
+      Modal.error({
+        title: "Failed to delete log",
+        content: err.message,
+      });
+    }
   };
 
   const renderPlanDetails = () => {
@@ -137,9 +169,9 @@ const MyPlan = () => {
           title={plan.title}
           subTitle={plan.status}
           extra={[
-            <Button key="edit" type="primary" onClick={handleClickEdit}>
-              {editMode ? "Edit Mode" : "Edit"}
-            </Button>,
+            plan.logs.length ? (<Button key="edit" type="primary" onClick={handleClickEdit}>
+              {editMode  ? "Edit Mode" : "Edit"}
+            </Button>) : null,
             editMode ? null : (
               <Button key="add" type="primary" onClick={handleClickAdd}>
                 Add Log
@@ -290,7 +322,7 @@ const MyPlan = () => {
       {renderPlanDetails()}
       {renderLogs()}
       <Modal title="Add New Log" visible={showModal} footer={null}>
-        <LogSetUp onCancel={handleHideModal} setPlan={setPlan} />
+        <LogSetUp onCancel={handleHideModal} setPlan={setPlan} weekCommencing={plan.weekCommencing} />
       </Modal>
     </div>
   );
