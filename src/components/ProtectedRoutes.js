@@ -13,9 +13,15 @@ const ProtectedRoutes = () => {
         <Link to="/dashboard">Dashboard</Link>
       </Menu.Item>
       <Menu.Item key="plans">
-        <Link to="/my-plans">My Plans</Link>
+        <Link to="/plans">My Plans</Link>
       </Menu.Item>
-      <Menu.Item key="logout" onClick={() => setUser({})}>
+      <Menu.Item
+        key="logout"
+        onClick={() => {
+          localStorage.removeItem("user");
+          setUser({});
+        }}
+      >
         Logout
       </Menu.Item>
     </Menu>

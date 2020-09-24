@@ -9,7 +9,9 @@ import { Router } from "./Router";
 const { Header, Content } = Layout;
 
 export const App = () => {
-  const [user, setUser] = useState({});
+  const localUser = localStorage.getItem("user");
+  const parsedLocalUser = JSON.parse(localUser);
+  const [user, setUser] = useState(parsedLocalUser || {});
 
   return (
     <HashRouter>

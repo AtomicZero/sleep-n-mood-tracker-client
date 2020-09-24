@@ -22,6 +22,7 @@ export const Login = () => {
   const onFinish = async (values) => {
     try {
       const { data } = await axios.post(LOGIN_URL, values);
+      localStorage.setItem("user", JSON.stringify(data));
       setUser(data);
     } catch (error) {
       Modal.error({
