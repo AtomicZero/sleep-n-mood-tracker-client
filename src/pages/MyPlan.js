@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import {
   Spin,
   Modal,
@@ -20,14 +20,16 @@ import moment from "moment";
 
 import { BASE_URL } from "../api/constants";
 import UserContext from "../context/UserContext";
+import LogSetUp from "../components/LogSetUp";
 
 const MyPlan = () => {
   const { planId } = useParams();
   const history = useHistory();
   const { user } = useContext(UserContext);
-  const [plan, setPlan] = useState([]);
+  const [plan, setPlan] = useState({});
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +72,56 @@ const MyPlan = () => {
   }
 
   const handleClickEdit = () => {
-    setEditMode(true);
+    setEditMode(!editMode);
+  };
+
+  const handleClickAdd = () => {
+    setShowModal(true);
+  };
+
+  const handleHideModal = (e) => {
+    setShowModal(false);
+  };
+
+  const handleLogUpdate = async ({
+    logId,
+    date,
+    mood,
+    actualSleepHours,
+  }) => {
+    try {
+      const { data: log } = await axios.put(
+        `${BASE_URL}/api/logs/${logId}`,
+        { date, mood, actualSleepHours },
+        {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      );
+
+      Modal.success({
+        content: "Your log has been successfully updated",
+        onOk() {
+          const filteredLogs = plan.logs.filter(each => each._id !== logId)
+          const newLogs = [...filteredLogs, log];
+
+          setPlan({
+            ...plan,
+            logs: newLogs.sort((a, b) => b.date - a.date),
+          })
+
+          setEditMode(false);
+        },
+      });
+    } catch (err) {
+      Modal.error({
+        title: "Failed to update log",
+        content: err.message,
+      });
+    }
+  };
+
+  const handleLogDelete = (event) => {
+    console.log("delete", event.currentTarget.id);
   };
 
   const renderPlanDetails = () => {
@@ -89,6 +140,11 @@ const MyPlan = () => {
             <Button key="edit" type="primary" onClick={handleClickEdit}>
               {editMode ? "Edit Mode" : "Edit"}
             </Button>,
+            editMode ? null : (
+              <Button key="add" type="primary" onClick={handleClickAdd}>
+                Add Log
+              </Button>
+            ),
           ]}
         >
           <Descriptions size="small">
@@ -105,14 +161,6 @@ const MyPlan = () => {
         </PageHeader>
       </div>
     );
-  };
-
-  const handleLogUpdate = (values) => {
-    console.log(values);
-  };
-
-  const handleLogDelete = (event) => {
-    console.log("delete", event.currentTarget.id);
   };
 
   const renderLogCard = (log) => {
@@ -133,6 +181,7 @@ const MyPlan = () => {
           <Form
             name="editLog"
             initialValues={{
+              logId: log._id,
               actualSleepHours: log.actualSleepHours,
               mood: log.mood,
               date: moment(log.date),
@@ -175,6 +224,12 @@ const MyPlan = () => {
               style={{ textAlign: "center", marginBottom: "8px" }}
             >
               <DatePicker format="DD/MM/YYYY" />
+            </Form.Item>
+            <Form.Item
+              name="logId"
+              hidden
+            >
+              <Input value={log._id} />
             </Form.Item>
             <Form.Item
               justify="center"
@@ -234,6 +289,9 @@ const MyPlan = () => {
     <div>
       {renderPlanDetails()}
       {renderLogs()}
+      <Modal title="Add New Log" visible={showModal} footer={null}>
+        <LogSetUp onCancel={handleHideModal} setPlan={setPlan} />
+      </Modal>
     </div>
   );
 };
