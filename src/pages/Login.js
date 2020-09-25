@@ -41,7 +41,7 @@ export const Login = () => {
         minHeight: "700px",
         backgroundImage: `url(${Background})`,
         backgroundPosition: "center",
-        backgroundSize: "fit",
+        backgroundSize: "auto",
         backgroundRepeat: "no-repeat",
       }}
     >

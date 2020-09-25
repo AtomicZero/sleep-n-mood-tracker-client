@@ -2,6 +2,7 @@
   "name": "sleep-n-mood-tracker-client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://atomiczero.github.io/sleep-n-mood-tracker-client/",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -11,7 +12,9 @@
     "antd": "^4.6.5",
     "axios": "^0.20.0",
     "date-fns": "^2.16.1",
+    "gh": "^2.8.8",
     "moment": "^2.29.0",
+    "pages": "0.0.16",
     "react": "^16.13.1",
     "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
@@ -20,6 +23,8 @@
     "recharts": "^1.8.5"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",    
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

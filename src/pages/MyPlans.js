@@ -70,7 +70,7 @@ const MyPlans = () => {
         style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}
         justify="center"
         align="middle"
-      >
+        >
         <Button
           type="primary"
           onClick={handleShowModal}
