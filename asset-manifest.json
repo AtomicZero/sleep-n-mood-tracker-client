@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/sleep-n-mood-tracker-client/static/css/main.3d6103cd.chunk.css",
+    "main.js": "/sleep-n-mood-tracker-client/static/js/main.924054fc.chunk.js",
+    "main.js.map": "/sleep-n-mood-tracker-client/static/js/main.924054fc.chunk.js.map",
+    "runtime-main.js": "/sleep-n-mood-tracker-client/static/js/runtime-main.dc10028d.js",
+    "runtime-main.js.map": "/sleep-n-mood-tracker-client/static/js/runtime-main.dc10028d.js.map",
+    "static/css/2.cd846464.chunk.css": "/sleep-n-mood-tracker-client/static/css/2.cd846464.chunk.css",
+    "static/js/2.0df8c93a.chunk.js": "/sleep-n-mood-tracker-client/static/js/2.0df8c93a.chunk.js",
+    "static/js/2.0df8c93a.chunk.js.map": "/sleep-n-mood-tracker-client/static/js/2.0df8c93a.chunk.js.map",
+    "index.html": "/sleep-n-mood-tracker-client/index.html",
+    "precache-manifest.0ee8078c26b1d12841d5f7793c1c76fa.js": "/sleep-n-mood-tracker-client/precache-manifest.0ee8078c26b1d12841d5f7793c1c76fa.js",
+    "service-worker.js": "/sleep-n-mood-tracker-client/service-worker.js",
+    "static/css/2.cd846464.chunk.css.map": "/sleep-n-mood-tracker-client/static/css/2.cd846464.chunk.css.map",
+    "static/css/main.3d6103cd.chunk.css.map": "/sleep-n-mood-tracker-client/static/css/main.3d6103cd.chunk.css.map",
+    "static/js/2.0df8c93a.chunk.js.LICENSE.txt": "/sleep-n-mood-tracker-client/static/js/2.0df8c93a.chunk.js.LICENSE.txt",
+    "static/media/4k-night-forest-material-design-art.jpg": "/sleep-n-mood-tracker-client/static/media/4k-night-forest-material-design-art.3f5353e5.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.dc10028d.js",
+    "static/css/2.cd846464.chunk.css",
+    "static/js/2.0df8c93a.chunk.js",
+    "static/css/main.3d6103cd.chunk.css",
+    "static/js/main.924054fc.chunk.js"
+  ]
+}
