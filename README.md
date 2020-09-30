@@ -40,6 +40,7 @@ The tools used to create the generator was Inquirer NPM see links below.
 
 ## Images
 * [Presentation](https://docs.google.com/presentation/d/16dXqdi0inO0bEb_XxTRdvm2uMznM0cOLs7HukAP4FkE/edit?usp=sharing)
+* [Demo](https://atomiczero.github.io/sleep-n-mood-tracker-client/#/dashboard)
 
 
 ## Usage 
